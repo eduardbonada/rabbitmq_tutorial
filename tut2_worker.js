@@ -36,7 +36,7 @@ amqp.connect('amqp://localhost', function(err, conn) {
     // just wait for messages to be consumed
     console.log("Waiting for tasks in %s. To exit press CTRL+C", q);
 
-    // get the task to perform and odel its processign time
+    // get the task to perform and model its processign time
     ch.consume(q, function(msg) {
 
       // get the seconds that wil take to perform this task: 1 second per '.'
