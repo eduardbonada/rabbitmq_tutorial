@@ -22,7 +22,7 @@ amqp.connect('amqp://localhost', function(err, conn) {
     console.log('Channel created')
 
     // declare the queue where we want to read from
-    var q = 'hello';
+    var q = 'tut1_hello';
 
     // assert the queue exists and otherwise create it (in case the consumer runs before the publisher)
     ch.assertQueue(q, {durable: false});
@@ -32,7 +32,9 @@ amqp.connect('amqp://localhost', function(err, conn) {
     
     // track a message that is consumed from the queue
     ch.consume(q, function(msg) {
+
       console.log("Received %s", msg.content.toString());
+      
     }, {noAck: true});
 
   });
