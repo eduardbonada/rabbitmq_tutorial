@@ -1,10 +1,18 @@
 /*
-RABBITMQ Tutorial 3 : https://www.rabbitmq.com/tutorials/tutorial-three-javascript.html
+RABBITMQ Tutorial 4 : https://www.rabbitmq.com/tutorials/tutorial-four-javascript.html
 
 Pub/Sub model. Receives a log from a queue.
 */
 
 var amqp = require('amqplib/callback_api');
+
+// process the arguments to know which log 'severity' should this reciever get 
+var args = process.argv.slice(2);
+
+if (args.length == 0) {
+  console.log("Usage: tut4_recieve:logs.js [info] [warning] [error]");
+  process.exit(1);
+}
 
 // connect to RabbitMQ server
 amqp.connect('amqp://localhost', function(err, conn) {
@@ -21,28 +29,29 @@ amqp.connect('amqp://localhost', function(err, conn) {
     console.log('Channel created')
 
     // declare the exchange that will be bound to the queue
-    var ex = 'logs';
+    var ex = 'direct_logs';
 
-    // assert the exchange (of type 'fanout' to broadcast to all bound queues) exists and otherwise create it
-    ch.assertExchange(ex, 'fanout', {durable: false});
+    // assert the exchange (of type 'direct' to route to different queues and log receivers) exists and otherwise create it
+    ch.assertExchange(ex, 'direct', {durable: false});
 
     // assert the queue exists and otherwise create it
     ch.assertQueue('', // let the server name the queue
       {exclusive: true}, // delete the queue once the connection is closed (we just want RealTime logs, not old ones)
       function(err, q){
 
-        // bind the queue to the exchange
-        ch.bindQueue(q.queue, ex, '');
+        // bind the queue to the exchange and the routing keys in arguments
+        args.forEach(function(severity) {
+          ch.bindQueue(q.queue, ex, severity);
+        });
 
         // just wait for messages to be consumed
-        console.log("Waiting for logs in %s. To exit press CTRL+C", q);
+        console.log("Waiting for logs. To exit press CTRL+C");
 
         // get the log messages
         ch.consume(q.queue, function(msg) {
-          console.log("Received log '%s'", msg.content.toString());
+          console.log("%s: '%s'", msg.fields.routingKey, msg.content.toString());
         }, {noAck: true});
 
     });
   });
 });
-

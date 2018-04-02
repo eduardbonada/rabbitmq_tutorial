@@ -1,7 +1,7 @@
 /*
 RABBITMQ Tutorial 3 : https://www.rabbitmq.com/tutorials/tutorial-three-javascript.html
 
-Pub/Sub model. Emits a log to an exchange.
+Pub/Sub model. Emits a log to a 'fanout' exchange.
 
 The message to log is entered through the command line
 */
@@ -28,7 +28,7 @@ amqp.connect('amqp://localhost', function(err, conn) {
     // get message from command line
     var msg = process.argv.slice(2).join(' ') || "Hello World!";
 
-    // assert the exchange (of type 'fanout') exists and otherwise create it
+    // assert the exchange (of type 'fanout' to broadcast to all bound queues) exists and otherwise create it
     ch.assertExchange(ex, 'fanout', {durable: false});
 
     // publish the log to the exchange (without specifying a queue to send the message to)
