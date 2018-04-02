@@ -1,0 +1,22 @@
+{
+  "name": "rabbitmq_tutorial",
+  "version": "1.0.0",
+  "description": "RabbitMQ Javascirpt tutorials from https://www.rabbitmq.com/tutorials/tutorial-one-javascript.html",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardbonada/rabbitmq_tutorial.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eduardbonada/rabbitmq_tutorial/issues"
+  },
+  "homepage": "https://github.com/eduardbonada/rabbitmq_tutorial#readme",
+  "dependencies": {
+    "amqplib": "^0.5.2"
+  }
+}
