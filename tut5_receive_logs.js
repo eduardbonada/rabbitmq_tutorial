@@ -1,8 +1,8 @@
 /*
-RABBITMQ Tutorial 4 : https://www.rabbitmq.com/tutorials/tutorial-four-javascript.html
+RABBITMQ Tutorial 5 : https://www.rabbitmq.com/tutorials/tutorial-five-javascript.html
 
 Pub/Sub model. 
-Setups a direct exchange.
+Sets up a topic exchange.
 Receives a log from a queue.
 */
 
@@ -12,7 +12,7 @@ var amqp = require('amqplib/callback_api');
 var args = process.argv.slice(2);
 
 if (args.length == 0) {
-  console.log("Usage: tut4_recieve:logs.js [info] [warning] [error]");
+  console.log("Usage: tut5_recieve:logs.js <facility>.<severity>");
   process.exit(1);
 }
 
@@ -31,10 +31,10 @@ amqp.connect('amqp://localhost', function(err, conn) {
     console.log('Channel created')
 
     // declare the exchange that will be bound to the queue
-    var ex = 'direct_logs';
+    var ex = 'topic_logs';
 
-    // assert the exchange (of type 'direct' to route to different queues and log receivers) exists and otherwise create it
-    ch.assertExchange(ex, 'direct', {durable: false});
+    // assert the exchange (of type 'topic' to route to different queues and log receivers) exists and otherwise create it
+    ch.assertExchange(ex, 'topic', {durable: false});
 
     // assert the queue exists and otherwise create it
     ch.assertQueue('', // let the server name the queue
@@ -42,8 +42,8 @@ amqp.connect('amqp://localhost', function(err, conn) {
       function(err, q){
 
         // bind the queue to the exchange and the routing keys in arguments
-        args.forEach(function(severity) {
-          ch.bindQueue(q.queue, ex, severity);
+        args.forEach(function(key) {
+          ch.bindQueue(q.queue, ex, key);
         });
 
         // just wait for messages to be consumed

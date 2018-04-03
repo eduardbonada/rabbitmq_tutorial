@@ -1,0 +1,4 @@
+https://tecadmin.net/install-rabbitmq-server-on-ubuntu/
+
+sudo systemctl start rabbitmq-server
+sudo systemctl stop rabbitmq-server
