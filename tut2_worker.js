@@ -21,13 +21,13 @@ amqp.connect('amqp://localhost', function(err, conn) {
 
     console.log('Channel created')
 
-    // declare the queue where we want to send to
+    // declare the queue where we want to consume from
     var q = 'tut2_tasks';
 
     // assert the queue exists and otherwise create it
     ch.assertQueue(q, 
       {
-        durable: true // tell rabbitmq to remind the queues even if it is turned off or it crashes
+        durable: false // tell rabbitmq to remind the queues even if it is turned off or it crashes
       });
 
     // only give one message at a time
@@ -49,7 +49,8 @@ amqp.connect('amqp://localhost', function(err, conn) {
 
         console.log("- Done");
 
-        ch.ack(msg); // send an acknowledge
+        // send an acknowledge
+        ch.ack(msg);
       
       }, secs * 1000);
     

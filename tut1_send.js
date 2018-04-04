@@ -21,7 +21,7 @@ amqp.connect('amqp://localhost', function(err, conn) {
 
     console.log('Channel created')
 
-    // declare the queue where we want to send to
+    // declare the queue where we want to consume from
     var q = 'tut1_hello';
 
     // assert the queue exists and otherwise create it
